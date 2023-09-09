@@ -1,5 +1,5 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Types } from 'mongoose'; // Update this line
+import { Document, Types } from 'mongoose';
 
 @Schema()
 export class User {
@@ -18,8 +18,14 @@ export class User {
   @Prop()
   accountBalance: number;
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: 'TransactionHistory' }] }) // Update this line
-  transactionHistory: Types.ObjectId[]; // Update this line
+  @Prop()
+  password: string;
+  
+  @Prop()
+  _id: Types.ObjectId;
+
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'TransactionHistory' }] })
+  transactionHistory: Types.ObjectId[];
 }
 
 export type UserDocument = User & Document;

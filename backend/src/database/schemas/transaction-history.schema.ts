@@ -4,7 +4,7 @@ import { Document } from 'mongoose';
 @Schema()
 export class TransactionHistory {
   @Prop()
-  transactionDate: Date;
+  transactionDate: string;
 
   @Prop()
   amount: number;
