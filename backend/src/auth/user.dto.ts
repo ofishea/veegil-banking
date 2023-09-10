@@ -21,6 +21,15 @@ export class UserInput {
   email: string;
 
   @Field()
+  phoneNumber: string;
+
+  @Field()
+  accountNumber: string;
+
+  @Field()
+  accountBalance: string;
+
+  @Field()
   password: string;
 }
 

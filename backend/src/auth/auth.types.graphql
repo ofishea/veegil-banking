@@ -4,7 +4,7 @@ type User {
   email: String!
   phoneNumber: String!
   accountNumber: String!
-  accountBalance: Float!
+  accountBalance: String!
   password: String!
 }
 
@@ -13,7 +13,7 @@ input CreateUserInput {
   email: String!
   phoneNumber: String!
   accountNumber: String!
-  accountBalance: Float!
+  accountBalance: String!
   password: String!
 }
 
@@ -26,12 +26,24 @@ input UpdateUserInput {
   password: String
 }
 
+input AuthInput {
+  email: String!
+  password: String!
+}
+
+type AuthLogin {
+  email: String!
+  password: String!
+}
+
 type Query {
   getUserById(userId: ID!): User
 }
 
 type Mutation {
-  createUser(input: CreateUserInput!): User
+  register(input: CreateUserInput!): User
+  login(input: AuthInput!): AuthLogin
   updateUser(userId: ID!, input: UpdateUserInput!): User
   deleteUser(userId: ID!): User
+  protectedResource: String
 }

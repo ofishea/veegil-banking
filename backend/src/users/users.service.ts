@@ -60,6 +60,6 @@ export class UsersService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    return null; // Authentication failed
+    return user;
   }
 }

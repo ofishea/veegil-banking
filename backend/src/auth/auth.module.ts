@@ -4,6 +4,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { AuthService } from './auth.service';
 import { UsersService } from '../users/users.service';
+import { AuthResolver } from './auth.resolver';
 import { UsersModule } from '../users/users.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtMiddleware } from '../middlewares/jwt.middleware';
@@ -17,7 +18,7 @@ import { join } from 'path';
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      typePaths: ['./**/*.graphql'],
+      typePaths: ['./**/*.graphql'], 
     //  autoSchemaFile: join(process.cwd(), './schema.graphql'), 
       context: ({ req }) => ({ req }),
     }),
@@ -30,11 +31,7 @@ import { join } from 'path';
     }),
     UsersModule,
   ],
-  providers: [
-    {
-      provide: APP_GUARD,
-      useClass: JwtAuthGuard,
-    }, AuthService, UsersService],
+  providers: [AuthService, AuthResolver, UsersService],
 })
 export class AuthModule implements NestModule {
     configure(consumer: MiddlewareConsumer) {

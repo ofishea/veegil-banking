@@ -20,9 +20,6 @@ export class User {
 
   @Prop()
   password: string;
-  
-  @Prop()
-  _id: Types.ObjectId;
 
   @Prop({ type: [{ type: Types.ObjectId, ref: 'TransactionHistory' }] })
   transactionHistory: Types.ObjectId[];

@@ -12,7 +12,6 @@ export class AuthService {
   ) {}
 
   async register(createUserDto: CreateUserDto) {
-    // Implement user registration logic, and return the user
     const user = await this.usersService.create(createUserDto);
     return user;
   }
@@ -20,7 +19,7 @@ export class AuthService {
   async login(authInput: AuthInput) {
     const { email, password } = authInput; // Extract email and password
     const user = await this.usersService.authenticateUser(email, password);
-    const payload = { sub: user._id, email: user.email }; // Customize the payload as needed
+    const payload = { email: user.email, password: user.password }; // Customize the payload as needed
     const token = this.jwtService.sign(payload);
     return token;
   }
