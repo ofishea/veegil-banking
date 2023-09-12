@@ -4,6 +4,47 @@
   "compilerOptions": {
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "es2020",
+    "lib": ["es2018", "dom"]
+  },
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true
+  },
+  "references": [],
+"typeRoots": [
+  "../node_modules/@types"
+],
+"include": [
+  "src",
+  "**/*",
+  "**/*.ts",
+  "global.d.ts",
+],
+"exclude": [
+  "node_modules",
+  "plugins",
+  "public"
+]
+}
+
+/* To learn more about this file see: https://angular.io/config/tsconfig.
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "noImplicitOverride": true,
@@ -16,13 +57,13 @@
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
-    "target": "ES2022",
-    "module": "ES2022",
-    "useDefineForClassFields": false,
+    "target": "es2022",
+    "module": "es2020",
     "lib": [
-      "ES2022",
+      "es2018", 
       "dom"
-    ]
+    ],
+    "useDefineForClassFields": false
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
@@ -31,3 +72,4 @@
     "strictTemplates": true
   }
 }
+ */

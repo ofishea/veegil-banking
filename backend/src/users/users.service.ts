@@ -4,12 +4,14 @@ import { Model } from 'mongoose';
 import { User, UserDocument } from '../database/schemas/user.schema';
 import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
 import * as bcrypt from 'bcrypt';
+import { Logger } from '@nestjs/common';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
   ) {}
+  logger = new Logger('UserService');
   async create(createUserDto: CreateUserDto): Promise<User> {
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(createUserDto.password, saltRounds);
@@ -27,7 +29,6 @@ export class UsersService {
   }
 
   async update(userId: string, updateUserDto: UpdateUserDto): Promise<User> {
-    // Implement user update logic here
     const updatedUser = await this.userModel.findByIdAndUpdate(userId, updateUserDto, {
       new: true,
     });
@@ -51,15 +52,18 @@ export class UsersService {
     const user = await this.findOneByEmail(email);
 
     if (!user) {
-      return null; // User not found
+      this.logger.warn(`User with email ${email} not found`);
+      return null;
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
+      this.logger.warn(`Invalid password for user with email ${password}`);
       throw new UnauthorizedException('Invalid credentials');
     }
 
+    this.logger.log(`User with email ${email} authenticated successfully`);
     return user;
   }
 }

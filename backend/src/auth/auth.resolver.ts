@@ -11,20 +11,20 @@ export class AuthResolver {
 
   @Mutation(() => UserInput)
   async register(@Args('input') createUserDto: CreateUserDto) {
-    return this.authService.register(createUserDto); 
+    return this.authService.register(createUserDto);
   }
 
-  @Mutation(() => AuthInput) 
-  async login(@Args('input') authInput: AuthInput) {
-    const token = await this.authService.login(authInput);
+  @Mutation(() => AuthInput)
+  async login(@Args('input') body: { email: string; password: string }) {
+    const token = await this.authService.login(body.email, body.password);
 
     if (!token) {
       throw new UnauthorizedException('Invalid credentials'); // Handle invalid login
     }
   
-    return { email: authInput.email, password: authInput.password, token };
+    return { email: body.email, password: body.password, token };
   }
-
+ 
   @Mutation(() => String)
   @UseGuards(JwtAuthGuard)
   async protectedResource(@Context() context) {

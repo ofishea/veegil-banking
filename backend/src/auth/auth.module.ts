@@ -2,6 +2,7 @@ import { Module, MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+require("dotenv").config();
 import { AuthService } from './auth.service';
 import { UsersService } from '../users/users.service';
 import { AuthResolver } from './auth.resolver';
@@ -16,17 +17,16 @@ import { join } from 'path';
 
 @Module({
   imports: [
-    GraphQLModule.forRoot<ApolloDriverConfig>({
+    GraphQLModule.forRoot<ApolloDriverConfig>({ 
       driver: ApolloDriver,
       typePaths: ['./**/*.graphql'], 
-    //  autoSchemaFile: join(process.cwd(), './schema.graphql'), 
       context: ({ req }) => ({ req }),
     }),
     MongooseModule.forFeature([
-      { name: User.name, schema: UserSchema }, // Register User schema
+      { name: User.name, schema: UserSchema }, 
     ]),
     JwtModule.register({
-      secret: 'veegil-secret',
+      secret: process.env.JWT_SECRET_KEY,
       signOptions: { expiresIn: '1h' },
     }),
     UsersModule,
@@ -35,6 +35,6 @@ import { join } from 'path';
 })
 export class AuthModule implements NestModule {
     configure(consumer: MiddlewareConsumer) {
-      consumer.apply(GraphqlMiddleware).forRoutes('*'); // Apply the middleware to all routes
+      consumer.apply(GraphqlMiddleware).forRoutes('*');
     }
   }

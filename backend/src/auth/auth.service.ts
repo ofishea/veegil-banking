@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+require("dotenv").config();
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { UserInput, AuthInput } from './user.dto';
@@ -16,11 +17,14 @@ export class AuthService {
     return user;
   }
 
-  async login(authInput: AuthInput) {
-    const { email, password } = authInput; // Extract email and password
+  async login(email: string, password: string) {
     const user = await this.usersService.authenticateUser(email, password);
-    const payload = { email: user.email, password: user.password }; // Customize the payload as needed
-    const token = this.jwtService.sign(payload);
+    if (!user) {
+      return null;
+    }
+
+    const payload = { fullName: user.fullName, email: user.email, phoneNumber: user.phoneNumber, accountNumber: user.accountNumber, accountBalance: user.accountBalance };
+    const token = this.jwtService.sign(payload, { secret: `${process.env.JWT_SECRET_KEY}` });
     return token;
   }
 
