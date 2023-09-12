@@ -23,6 +23,18 @@ export class DashboardComponent {
   });
 }
 
+  deposit() {
+    this.router.navigate(['/deposit']);
+  }
+
+  withdraw() {
+    this.router.navigate(['/withdraw']);
+  }
+
+  profile() {
+    this.router.navigate(['/profile']);
+  }
+
   logout() {
     this.usersService.logout();
     this.router.navigate(['/login']);

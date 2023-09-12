@@ -6,8 +6,33 @@ export interface User {
     accountNumber: string;
     accountBalance: string;
     password: string;
+    transactionHistory: [
+       { 
+        reference: string;
+        amount: number;
+        fromAccountNumber: number;
+        fromAccountName: string;
+        toAccountNumber: number;
+        toAccountName: string;
+        type: string;
+        date: string;
+        time: string;
+        }
+    ]
   }
 
   export interface AuthResponse {
     token: string;
+  }
+
+  export class Transfer {
+      reference: string;
+      amount: number;
+      fromAccountNumber: number;
+      fromAccountName: string;
+      toAccountNumber: number;
+      toAccountName: string;
+      type: string;
+      date: string;
+      time: string;
   }

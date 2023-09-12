@@ -5,9 +5,10 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { map, finalize } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
-import { User, AuthResponse } from '../_models';
+import { User, AuthResponse, Transfer } from '../_models';
 
 const baseUrl = `${environment.apiUrl}/users`;
+const transferUrl = `${environment.apiUrl}/transaction`;
 
 
 @Injectable({ providedIn: 'root' })
@@ -28,6 +29,14 @@ export class UsersService {
 
   register(user: User): Observable<User> {
     return this.http.post<User>(`${baseUrl}/register`, user);
+  }
+
+  transfer(transfer: Transfer): Observable<User> {
+    return this.http.post<User>(`${transferUrl}/transfer`, transfer);
+  }
+
+  getUserByAccountNumber(accountNumber: string): Observable<User | null> {
+    return this.http.get<User | null>(`${baseUrl}/accountNumber/${accountNumber}`);
   }
 
   getAll() {

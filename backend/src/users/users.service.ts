@@ -40,6 +40,15 @@ export class UsersService {
     return updatedUser;
   }
 
+  async getUserByAccountNumber(accountNumber: string): Promise<User | null> {
+    try {
+      const user = await this.userModel.findOne({ accountNumber }).exec();
+      return user || null;
+    } catch (error) {
+      throw new Error('Error searching for user by account number');
+    }
+  }
+
   async remove(id: string): Promise<User> {
     return this.userModel.findByIdAndRemove(id).exec();
   }

@@ -25,11 +25,16 @@ export class UsersController {
   }
 
     return { token };
-}
+  }
+
+  @Get('accountNumber/:accountNumber')
+  findAccountNumber(@Param('accountNumber') accountNumber: string) {
+    return this.usersService.getUserByAccountNumber(accountNumber);
+  }
 
   @Get()
   findAll() {
-    return this.usersService.findAll();
+    return this.usersService.findAll(); 
   }
 
   @Get(':id')
