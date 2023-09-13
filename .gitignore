@@ -120,7 +120,6 @@ dist
 .vscode-test
 .vscode/
 .angular/
-backend/
 
 # yarn v2
 .yarn/cache
