@@ -1,5 +1,73 @@
-<p>Welcome! {{ user.fullName }}</p>
-<p><a (click)="deposit()">deposit</a></p>
-<p><a (click)="withdraw()">withdraw</a></p>
-<p><a (click)="profile()">profile</a></p>
-<p><a (click)="logout()">logout</a></p>
+<main id="posts">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-9">
+            <h4>Welcome! {{ user.fullName }}</h4>
+          <div class="card">
+            <div class="card-header">
+              <h4>Transaction History (Account Balance - ₦{{user.accountBalance || 0 | number}})</h4>
+            </div>
+            <ng-container *ngFor="let data of users">
+                <div *ngIf="user.email === data.email">
+            <table class="table table-striped">
+              <thead class="thead-dark">
+                <tr>
+                  <th>#</th>
+                  <th>Amount</th>
+                  <th>Sender</th>
+                  <th>Receiver</th>
+                  <th>Date/Time</th>
+                </tr>
+              </thead>
+              <tbody *ngFor="let transfer of data.transactionHistory.slice().reverse()">
+                <tr>
+                  <td>{{transfer.reference}}</td>
+                  <td>{{transfer.amount | number}}</td>
+                  <td>{{transfer.fromAccountName}} ({{transfer.fromAccountNumber}})</td>
+                  <td>{{transfer.toAccountName}} ({{transfer.toAccountNumber}})</td>
+                  <td>{{transfer.date}} ({{transfer.time}})
+                  </td>
+                </tr>
+              </tbody>
+              <tbody *ngIf="data.transactionHistory.length < 1">
+              <p class="text-center">You have no transfer history yet.</p>
+              </tbody>
+            </table>
+        </div>
+        </ng-container>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card text-center text-white bg-primary mb-3">
+            <div class="card-body">
+              <h3>Send Funds</h3>
+              <h4 class="display-4">
+                <i class="fas fa-pencil-alt"></i>
+              </h4>
+              <a class="btn btn-sm btn-outline-light"(click)="withdraw()">make a withdraw</a>
+            </div>
+          </div>
+
+          <div class="card text-center text-white bg-success mb-3">
+            <div class="card-body">
+              <h3>Profile</h3>
+              <h4 class="display-4">
+                <i class="fas fa-folder"></i>
+              </h4>
+              <a class="btn btn-sm btn-outline-light" (click)="profile()">view profile</a>
+            </div>
+          </div>
+
+          <div class="card text-center text-white bg-warning mb-3">
+            <div class="card-body">
+              <h3>Logout</h3>
+              <h4 class="display-4">
+                <i class="fas fa-users"></i>
+              </h4>
+              <a class="btn btn-sm btn-outline-light" (click)="logout()">logout</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>

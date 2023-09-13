@@ -49,6 +49,24 @@ export class UsersService {
     }
   }
 
+  async findPhoneNumber(phoneNumber: string): Promise<User | null> {
+    try {
+      const user = await this.userModel.findOne({ phoneNumber }).exec();
+      return user || null;
+    } catch (error) {
+      throw new Error('Error searching for user by phone number');
+    }
+  } 
+
+  async findEmail(email: string): Promise<UserDocument | null> {
+    try {
+      const user = await this.userModel.findOne({ email }).exec();
+      return user || null;
+    } catch (error) {
+      throw new Error('Error searching for user by email');
+    }
+  }
+
   async remove(id: string): Promise<User> {
     return this.userModel.findByIdAndRemove(id).exec();
   }

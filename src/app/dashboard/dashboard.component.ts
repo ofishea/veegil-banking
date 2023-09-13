@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { UsersService, AuthService } from '../_services';
 import { User } from '../_models';
 import { Router } from '@angular/router';
+import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-dashboard',
@@ -11,6 +12,7 @@ import { Router } from '@angular/router';
 export class DashboardComponent {
 
   user: User;
+  users: User[];
 
   constructor(
     private authService: AuthService,
@@ -21,6 +23,12 @@ export class DashboardComponent {
   this.usersService.user.subscribe((user) => {
     this.user = user;
   });
+  this.usersService
+    .getAll()
+    .pipe(first())
+    .subscribe((users) => {
+      this.users = users;
+    });
 }
 
   deposit() {

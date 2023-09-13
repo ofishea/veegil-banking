@@ -4,7 +4,7 @@ export interface User {
     email: string;
     phoneNumber: string;
     accountNumber: string;
-    accountBalance: string;
+    accountBalance: number;
     password: string;
     transactionHistory: [
        { 

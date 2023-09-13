@@ -1,28 +1,28 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Types } from 'mongoose';
+import { Document, SchemaTypes, Types } from 'mongoose';
 
 @Schema()
 export class User {
   @Prop()
   fullName: string;
 
-  @Prop()
+  @Prop({ unique: true })
   email: string;
 
-  @Prop()
+  @Prop({ unique: true })
   phoneNumber: string;
 
-  @Prop()
+  @Prop({ unique: true })
   accountNumber: string;
 
   @Prop()
   accountBalance: number;
 
-  @Prop()
-  password: string;
+  @Prop([{ type: SchemaTypes.Mixed }])
+  transactionHistory: any[];
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: 'TransactionHistory' }] })
-  transactionHistory: Types.ObjectId[];
+  @Prop()
+  password: string; 
 }
 
 export type UserDocument = User & Document;

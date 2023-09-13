@@ -39,6 +39,14 @@ export class UsersService {
     return this.http.get<User | null>(`${baseUrl}/accountNumber/${accountNumber}`);
   }
 
+  findPhoneNumber(phoneNumber: string): Observable<User | null> {
+    return this.http.get<User | null>(`${baseUrl}/phoneNumber/${phoneNumber}`);
+  }
+
+  findEmail(email: string): Observable<User | null> {
+    return this.http.get<User | null>(`${baseUrl}/findEmail/${email}`);
+  }
+
   getAll() {
       return this.http.get<User[]>(baseUrl);
   }

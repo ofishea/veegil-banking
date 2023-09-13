@@ -13,64 +13,123 @@ export class TransactionHistoryService {
     @InjectModel(TransactionHistory.name) private readonly transactionHistoryModel: Model<TransactionHistoryDocument>,
   ) {}
   async credit(CreateTransactionHistoryDto: CreateTransactionHistoryDto): Promise<TransactionHistory> {
-    const { amount, fromAccountNumber, fromAccountName, toAccountNumber, toAccountName, date, time } = CreateTransactionHistoryDto;
-    const sender = await this.findByAccountNumber(fromAccountNumber);
-    const receiver = await this.findByAccountNumber(toAccountNumber);
-    
-    if (!sender || !receiver) {
-      throw new NotFoundException('Sender or receiver not found');
+    const session = await this.userModel.startSession();
+  
+    try {
+      session.startTransaction();
+  
+      const { amount, fromAccountNumber, fromAccountName, toAccountNumber, toAccountName, date, time } = CreateTransactionHistoryDto;
+  
+      const sender = await this.userModel.findOne({ accountNumber: fromAccountNumber }).session(session);
+      const receiver = await this.userModel.findOne({ accountNumber: toAccountNumber }).session(session);
+  
+      if (!sender || !receiver) {
+        throw new NotFoundException('Sender or receiver not found');
+      }
+  
+      if (sender.accountBalance < amount) {
+        throw new BadRequestException('Insufficient balance');
+      }
+  
+      receiver.accountBalance = receiver.accountBalance + +amount;
+  
+      const createTransaction = new this.transactionHistoryModel(CreateTransactionHistoryDto);
+      createTransaction.reference = this.generateRandomString(6);
+      createTransaction.amount = amount;
+      createTransaction.fromAccountNumber = fromAccountNumber;
+      createTransaction.fromAccountName = fromAccountName;
+      createTransaction.toAccountNumber = toAccountNumber;
+      createTransaction.toAccountName = toAccountName;
+      createTransaction.type = 'credit';
+      createTransaction.date = date;
+      createTransaction.time = time;
+  
+    //  await createTransaction.save();
+      receiver.transactionHistory.push({
+        reference: createTransaction.reference,
+        amount: createTransaction.amount,
+        fromAccountNumber: createTransaction.fromAccountNumber,
+        fromAccountName: createTransaction.fromAccountName,
+        toAccountNumber: createTransaction.toAccountNumber,
+        toAccountName: createTransaction.toAccountName,
+        type: createTransaction.type,
+        date: createTransaction.date,
+        time: createTransaction.time,
+      });
+
+      await receiver.save();
+  
+      await session.commitTransaction();
+      session.endSession();
+  
+      return createTransaction;
+    } catch (error) {
+      await session.abortTransaction();
+      session.endSession();
+      throw error;
     }
-
-    // Check if the sender has sufficient balance
-    if (sender.accountBalance < amount) {
-      throw new BadRequestException('Insufficient balance');
-    }  
-    
-    // Update sender and receiver account balances
-    sender.accountBalance -= amount;
-    
-    const createTransaction = new this.transactionHistoryModel(CreateTransactionHistoryDto);
-    createTransaction.amount = amount;
-    createTransaction.fromAccountNumber = fromAccountNumber;
-    createTransaction.fromAccountName = fromAccountName;
-    createTransaction.toAccountNumber = toAccountNumber;
-    createTransaction.toAccountName = toAccountName;
-    createTransaction.type = 'credit';
-    createTransaction.date = date;
-    createTransaction.time = time;
-    return createTransaction.save();
   }
-
+  
   async debit(CreateTransactionHistoryDto: CreateTransactionHistoryDto): Promise<TransactionHistory> {
-    const { amount, fromAccountNumber, fromAccountName, toAccountNumber, toAccountName, date, time } = CreateTransactionHistoryDto;
-    const sender = await this.findByAccountNumber(fromAccountNumber);
-    const receiver = await this.findByAccountNumber(toAccountNumber);
-    
-    if (!sender || !receiver) {
-      throw new NotFoundException('Sender or receiver not found');
+    const session = await this.userModel.startSession();
+  
+    try {
+      session.startTransaction();
+  
+      const { amount, fromAccountNumber, fromAccountName, toAccountNumber, toAccountName, date, time } = CreateTransactionHistoryDto;
+  
+      const sender = await this.userModel.findOne({ accountNumber: fromAccountNumber }).session(session);
+      const receiver = await this.userModel.findOne({ accountNumber: toAccountNumber }).session(session);
+  
+      if (!sender || !receiver) {
+        throw new NotFoundException('Sender or receiver not found');
+      }
+  
+      if (sender.accountBalance < amount) {
+        throw new BadRequestException('Insufficient balance');
+      }
+  
+      sender.accountBalance -= amount;
+  
+      const createTransaction = new this.transactionHistoryModel(CreateTransactionHistoryDto);
+      createTransaction.reference = this.generateRandomString(6);
+      createTransaction.amount = amount;
+      createTransaction.fromAccountNumber = fromAccountNumber;
+      createTransaction.fromAccountName = fromAccountName;
+      createTransaction.toAccountNumber = toAccountNumber;
+      createTransaction.toAccountName = toAccountName;
+      createTransaction.type = 'debit';
+      createTransaction.date = date;
+      createTransaction.time = time;
+  
+    //  await createTransaction.save();
+      sender.transactionHistory.push({
+        reference: createTransaction.reference,
+        amount: createTransaction.amount,
+        fromAccountNumber: createTransaction.fromAccountNumber,
+        fromAccountName: createTransaction.fromAccountName,
+        toAccountNumber: createTransaction.toAccountNumber,
+        toAccountName: createTransaction.toAccountName,
+        type: createTransaction.type,
+        date: createTransaction.date,
+        time: createTransaction.time,
+      });
+  
+      await sender.save();
+  
+      await session.commitTransaction();
+      session.endSession();
+  
+      return createTransaction;
+    } catch (error) {
+      await session.abortTransaction();
+      session.endSession();
+      throw error;
     }
-
-    // Check if the sender has sufficient balance
-    if (sender.accountBalance < amount) {
-      throw new BadRequestException('Insufficient balance');
-    }  
-    
-    // Update sender and receiver account balances
-    sender.accountBalance -= amount;
-    receiver.accountBalance += amount;
-    
-    const createTransaction = new this.transactionHistoryModel(CreateTransactionHistoryDto);
-    createTransaction.reference = this.generateRandomString(12);
-    createTransaction.amount = amount;
-    createTransaction.fromAccountNumber = fromAccountNumber;
-    createTransaction.fromAccountName = fromAccountName;
-    createTransaction.toAccountNumber = toAccountNumber;
-    createTransaction.toAccountName = toAccountName;
-    createTransaction.type = 'debit';
-    createTransaction.date = date;
-    createTransaction.time = time;
-    return createTransaction.save();
   }
+  
+
+
   
   generateRandomString(length: number): string {
     const characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';

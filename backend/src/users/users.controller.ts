@@ -32,6 +32,16 @@ export class UsersController {
     return this.usersService.getUserByAccountNumber(accountNumber);
   }
 
+  @Get('phoneNumber/:phoneNumber')
+  findPhoneNumber(@Param('phoneNumber') phoneNumber: string) {
+    return this.usersService.findPhoneNumber(phoneNumber);
+  }
+
+  @Get('findEmail/:email') // Change 'email' to 'findByEmail'
+  findEmail(@Param('email') email: string) {
+  return this.usersService.findEmail(email);
+  }
+
   @Get()
   findAll() {
     return this.usersService.findAll(); 

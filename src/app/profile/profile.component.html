@@ -1,3 +1,44 @@
-<p>{{ user.fullName }}</p>
-<p>{{ user.email }}</p>
-<p>{{ user.phoneNumber }}</p>
+
+
+<!-- Page Content -->
+<div class="container">
+    <section id="profile">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>My Profile</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="name">Full Name</label>
+                                    <label for="name">{{ user.fullName }}</label>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="email">Email Address</label>
+                                    <label for="email">{{ user.email }}</label>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="phone">Phone Number</label>
+                                    <label for="phone">{{ user.phoneNumber }}</label>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="accountNumber">Account Number</label>
+                                    <label for="accountNumber">{{ user.accountNumber }}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
