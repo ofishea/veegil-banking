@@ -5,7 +5,7 @@ import { CreateUserDto, UpdateUserDto } from '../users/dto/user.dto';
 import { UnauthorizedException, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from './auth.guard';
 
-@Resolver('Auth')
+@Resolver('Auth') 
 export class AuthResolver {
   constructor(private readonly authService: AuthService) {}
 
